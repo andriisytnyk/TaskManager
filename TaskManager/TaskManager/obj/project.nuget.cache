@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "VDmAahLh0Ietmibi8cqMUjCtSCV/7nWh3gyoGDo1JINQhsHkbXNonbTLeQRlR4qCxAO/VWmDBd5bTs12XihNLw==",
+  "success": true,
+  "projectFilePath": "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager\\TaskManager.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\sytny\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
+  ],
+  "logs": []
+}
