@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager\\TaskManager.csproj": {}
+    "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager\\TaskManager.API.csproj": {}
   },
   "projects": {
-    "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager\\TaskManager.csproj": {
+    "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager\\TaskManager.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager\\TaskManager.csproj",
-        "projectName": "TaskManager",
-        "projectPath": "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager\\TaskManager.csproj",
+        "projectUniqueName": "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager\\TaskManager.API.csproj",
+        "projectName": "TaskManager.API",
+        "projectPath": "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager\\TaskManager.API.csproj",
         "packagesPath": "C:\\Users\\sytny\\.nuget\\packages\\",
         "outputPath": "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager\\obj\\",
         "projectStyle": "PackageReference",

@@ -1,10 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "VDmAahLh0Ietmibi8cqMUjCtSCV/7nWh3gyoGDo1JINQhsHkbXNonbTLeQRlR4qCxAO/VWmDBd5bTs12XihNLw==",
+  "dgSpecHash": "mKJxzqhu9G7XHtOps3fa23bJStc3AoLThOxaVd/2er6wh8o5PXNX9e9Mp1Rm0U3nbZVg4wFEihPneTFFuTxmMw==",
   "success": true,
-  "projectFilePath": "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager\\TaskManager.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\sytny\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
-  ],
+  "projectFilePath": "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager\\TaskManager.API.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }
