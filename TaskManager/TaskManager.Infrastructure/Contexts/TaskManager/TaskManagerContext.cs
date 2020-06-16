@@ -25,7 +25,7 @@ namespace TaskManager.Infrastructure.Contexts.TaskManager
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Task>(ConfigureTask);
+            modelBuilder.Entity<SubTask>(ConfigureSubTask);
             modelBuilder.Entity<GlobalTask>(ConfigureGlobalTask);
             modelBuilder.Entity<PlannedTask>(ConfigurePlannedTask);
         }

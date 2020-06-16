@@ -16,7 +16,7 @@ namespace TaskManager.Infrastructure.Contexts.TaskManager
 
         public void ConfigurePlannedTask(EntityTypeBuilder<PlannedTask> builder)
         {
-            builder.ToTable(TaskTableName);
+            builder.ToTable(PlannedTaskTableName);
             builder.HasKey(g => g.Id).IsClustered();
             builder.Property(g => g.Name).HasMaxLength(30).HasDefaultValue("New task").IsRequired();
             builder.Property(g => g.Description).HasMaxLength(100);
@@ -26,7 +26,7 @@ namespace TaskManager.Infrastructure.Contexts.TaskManager
             builder.Property(g => g.Estimation).IsRequired();
             builder.Property(g => g.Requirement).HasDefaultValue(true).IsRequired();
             builder.Property(g => g.Frequency).HasDefaultValue(Frequency.NonRepeating).IsRequired();
-            builder.HasMany<Task>(TaskPrivatePropertyName)
+            builder.HasMany<SubTask>(TaskPrivatePropertyName)
                 .WithOne()
                 .HasForeignKey(ParentTaskName)
                 .IsRequired()

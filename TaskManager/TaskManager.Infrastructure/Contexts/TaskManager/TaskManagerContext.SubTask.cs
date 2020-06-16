@@ -10,13 +10,13 @@ namespace TaskManager.Infrastructure.Contexts.TaskManager
 {
     public partial class TaskManagerContext
     {
-        private const string TaskTableName = "Tasks";
+        private const string SubTaskTableName = "SubTasks";
 
-        public DbSet<Task> Tasks { get; set; }
+        public DbSet<SubTask> SubTasks { get; set; }
 
-        public void ConfigureTask(EntityTypeBuilder<Task> builder)
+        public void ConfigureSubTask(EntityTypeBuilder<SubTask> builder)
         {
-            builder.ToTable(TaskTableName);
+            builder.ToTable(SubTaskTableName);
             builder.HasKey(t => t.Id).IsClustered();
             builder.Property(t => t.Name).HasMaxLength(30).HasDefaultValue("New task").IsRequired();
             builder.Property(t => t.Description).HasMaxLength(100);
