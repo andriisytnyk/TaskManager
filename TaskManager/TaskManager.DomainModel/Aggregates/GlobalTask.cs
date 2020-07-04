@@ -7,6 +7,6 @@ namespace TaskManager.DomainModel.Aggregates
     public class GlobalTask : Task
     {
         public DateTime FinishDate { get; set; }
-        public List<Task> SubTasks { get; set; }
+        public List<SubTask> SubTasks { get; set; }
     }
 }
