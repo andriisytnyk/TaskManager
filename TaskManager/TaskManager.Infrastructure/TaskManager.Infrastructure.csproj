@@ -15,10 +15,10 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TaskManager.Core\TaskManager.Core.csproj" />
     <ProjectReference Include="..\TaskManager.DomainModel\TaskManager.DomainModel.csproj" />
   </ItemGroup>
 
