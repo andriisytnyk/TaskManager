@@ -24,8 +24,7 @@ namespace TaskManager.Infrastructure.Contexts.TaskManager
             builder.Property(g => g.FinishDate).IsRequired();
             builder.HasMany<SubTask>(TaskPrivatePropertyName)
                 .WithOne()
-                .HasForeignKey(ParentTaskName)
-                .IsRequired()
+                .HasForeignKey(ParentGlobalTaskName)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

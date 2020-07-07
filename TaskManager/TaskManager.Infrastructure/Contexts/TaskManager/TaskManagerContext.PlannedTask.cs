@@ -28,8 +28,7 @@ namespace TaskManager.Infrastructure.Contexts.TaskManager
             builder.Property(g => g.Frequency).HasDefaultValue(Frequency.NonRepeating).IsRequired();
             builder.HasMany<SubTask>(TaskPrivatePropertyName)
                 .WithOne()
-                .HasForeignKey(ParentTaskName)
-                .IsRequired()
+                .HasForeignKey(ParentPlannedTaskName)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

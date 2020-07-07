@@ -9,7 +9,8 @@ namespace TaskManager.Infrastructure.Contexts.TaskManager
     public partial class TaskManagerContext : DbContext
     {
         private const string TaskPrivatePropertyName = "SubTasks";
-        private const string ParentTaskName = "ParentTask";
+        private const string ParentGlobalTaskName = "ParentGlobalTask";
+        private const string ParentPlannedTaskName = "ParentPlannedTask";
 
         public TaskManagerContext()
         {

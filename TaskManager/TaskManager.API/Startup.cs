@@ -34,7 +34,9 @@ namespace TaskManager
 
             services.AddDbContext<TaskManagerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TaskManager")));
 
-            //services.AddScoped<IRepository<GlobalTask>, GlobalTaskRepository>();
+            services.AddScoped<IRepository<GlobalTask>, GlobalTaskRepository>();
+            services.AddScoped<IRepository<PlannedTask>, PlannedTaskRepository>();
+            services.AddScoped<IRepository<SubTask>, SubTaskRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

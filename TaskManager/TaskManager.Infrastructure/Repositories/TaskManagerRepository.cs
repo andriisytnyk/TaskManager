@@ -22,6 +22,8 @@ namespace TaskManager.Infrastructure.Repositories
         public void Add(T entity)
         {
             taskManagerContext.Set<T>().Add(entity);
+
+            taskManagerContext.SaveChanges();
         }
 
         public void AddOrUpdate(T entity)
@@ -30,6 +32,8 @@ namespace TaskManager.Infrastructure.Repositories
                 Add(entity);
             else
                 Update(entity);
+
+            taskManagerContext.SaveChanges();
         }
 
         public async Task<int> CountAll()
@@ -40,6 +44,8 @@ namespace TaskManager.Infrastructure.Repositories
         public void Delete(T entity)
         {
             taskManagerContext.Entry(entity).State = EntityState.Deleted;
+
+            taskManagerContext.SaveChanges();
         }
 
         public async Task<IReadOnlyList<T>> GetAll()
@@ -60,6 +66,8 @@ namespace TaskManager.Infrastructure.Repositories
         public void Update(T entity)
         {
             taskManagerContext.Entry(entity).State = EntityState.Modified;
+
+            taskManagerContext.SaveChanges();
         }
 
         private IQueryable<T> ApplySpecification(ISpecification<T> specification)

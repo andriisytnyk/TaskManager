@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManager.Infrastructure.Contexts.TaskManager;
 
 namespace TaskManager.Infrastructure.Migrations
 {
     [DbContext(typeof(TaskManagerContext))]
-    partial class TaskManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20200707214644_FixSubTasks")]
+    partial class FixSubTasks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,9 +120,11 @@ namespace TaskManager.Infrastructure.Migrations
                         .HasDefaultValue("New task");
 
                     b.Property<int?>("ParentGlobalTask")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("ParentPlannedTask")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -143,12 +147,14 @@ namespace TaskManager.Infrastructure.Migrations
                     b.HasOne("TaskManager.DomainModel.Aggregates.GlobalTask", null)
                         .WithMany("SubTasks")
                         .HasForeignKey("ParentGlobalTask")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TaskManager.DomainModel.Aggregates.PlannedTask", null)
                         .WithMany("SubTasks")
                         .HasForeignKey("ParentPlannedTask")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
