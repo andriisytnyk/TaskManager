@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.API.DTOs;
 using TaskManager.Core.Repositories;
+using TaskManager.Core.Specifications.GlobalTasksSpecifications;
 using TaskManager.DomainModel.Aggregates;
 
 namespace TaskManager.API.Controllers
 {
-    //[ApiVersion("1.0")]
-    //[Route("api/v{version:apiVersion}/[controller]")]
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class GlobalTasksController : ControllerBase
     {
         public IRepository<GlobalTask> GlobalTaskRepository { get; set; }
@@ -28,7 +29,25 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                return Ok(await GlobalTaskRepository.GetAll());
+                var globalTaskWithDependenciesSpecification = new GlobalTaskWithDependenciesSpecification();
+
+                return Ok(await GlobalTaskRepository.GetList(globalTaskWithDependenciesSpecification));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetGlobalTask(int id)
+        {
+            try
+            {
+                var globalTaskByIdSpecification = new GlobalTaskByIdSpecification(id);
+
+                return Ok((await GlobalTaskRepository.GetList(globalTaskByIdSpecification)).SingleOrDefault());
             }
             catch (Exception ex)
             {
@@ -47,14 +66,59 @@ namespace TaskManager.API.Controllers
                     Description = globalTaskDTO.Description,
                     FinishDate = globalTaskDTO.FinishDate,
                     Status = globalTaskDTO.Status,
-                    SubTasks = globalTaskDTO.SubTasks.Select(st => new SubTask
+                    SubTasks = globalTaskDTO.SubTasks?.Select(st => new SubTask
                     {
                         Id = st.Id,
                         Name = st.Name,
                         Description = st.Description,
                         Status = st.Status
-                    }).ToList()
+                    })
                 });
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateGlobalTask([FromBody] GlobalTaskDTO globalTaskDTO)
+        {
+            try
+            {
+                GlobalTaskRepository.Update(new GlobalTask
+                {
+                    Id = globalTaskDTO.Id,
+                    Name = globalTaskDTO.Name,
+                    Description = globalTaskDTO.Description,
+                    FinishDate = globalTaskDTO.FinishDate,
+                    Status = globalTaskDTO.Status,
+                    SubTasks = globalTaskDTO.SubTasks?.Select(st => new SubTask
+                    {
+                        Id = st.Id,
+                        Name = st.Name,
+                        Description = st.Description,
+                        Status = st.Status
+                    })
+                });
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteGlobalTask(int id)
+        {
+            try
+            {
+                GlobalTaskRepository.Delete(await GlobalTaskRepository.GetById(id));
+
                 return Ok();
             }
             catch (Exception ex)

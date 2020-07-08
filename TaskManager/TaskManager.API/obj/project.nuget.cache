@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "tpcR+aXcXP/lQnQHWAWaUoAS2DXS+26iOARTcwHqVs1TvneHeJUupK+lb05/oiSAxht5I/e5ck/aQ9wDnnifWA==",
+  "dgSpecHash": "2unyTSmpbdaxFTnm4IWjq4vCKTpFvNpy9n4kL6th8QyWy7IUaKrslv+x1juFkZp+mQC0XByFBb3WjwgaAP7S7g==",
   "success": true,
   "projectFilePath": "E:\\Alexandr\\Repo\\TaskManager\\TaskManager\\TaskManager.API\\TaskManager.API.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\sytny\\.nuget\\packages\\microsoft.aspnetcore.mvc.versioning\\4.1.1\\microsoft.aspnetcore.mvc.versioning.4.1.1.nupkg.sha512",
+    "C:\\Users\\sytny\\.nuget\\packages\\microsoft.aspnetcore.mvc.versioning\\4.0.0-preview8.19405.7\\microsoft.aspnetcore.mvc.versioning.4.0.0-preview8.19405.7.nupkg.sha512",
     "C:\\Users\\sytny\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\sytny\\.nuget\\packages\\microsoft.bcl.hashcode\\1.1.0\\microsoft.bcl.hashcode.1.1.0.nupkg.sha512",
     "C:\\Users\\sytny\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

@@ -11,18 +11,16 @@ namespace TaskManager.Core.Repositories
     {
         Task<T> GetById(int id);
 
-        Task<IReadOnlyList<T>> GetAll();
-
         Task<IReadOnlyList<T>> GetList(ISpecification<T> specification);
 
         void Add(T entity);
 
         void Update(T entity);
 
-        void AddOrUpdate(T entity);
+        //void AddOrUpdate(T entity);
 
         void Delete(T entity);
 
-        Task<int> CountAll();
+        //Task<int> CountAll();
     }
 }

@@ -12,6 +12,6 @@ namespace TaskManager.DomainModel.Aggregates
         public TimeSpan Estimation { get; set; }
         public bool Requirement { get; set; }
         public Frequency Frequency { get; set; }
-        public List<SubTask> SubTasks { get; set; }
+        public IEnumerable<SubTask> SubTasks { get; set; }
     }
 }

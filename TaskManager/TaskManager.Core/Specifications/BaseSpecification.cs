@@ -28,6 +28,7 @@ namespace BusinessRuleEngine.Core.Specifications
         {
             Includes.Add(includeExpression);
         }
+
         public virtual void AddInclude(string includeString)
         {
             IncludeStrings.Add(includeString);
@@ -44,10 +45,12 @@ namespace BusinessRuleEngine.Core.Specifications
             Take = take;
             IsPagingEnabled = true;
         }
+
         protected virtual void ApplyOrderBy(Expression<Func<T, object>> orderByExpression)
         {
             OrderBy = orderByExpression;
         }
+
         protected virtual void ApplyOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
         {
             OrderByDescending = orderByDescendingExpression;

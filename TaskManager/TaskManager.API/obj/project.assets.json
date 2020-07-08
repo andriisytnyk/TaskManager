@@ -2,13 +2,13 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "Microsoft.AspNetCore.Mvc.Versioning/4.1.1": {
+      "Microsoft.AspNetCore.Mvc.Versioning/4.0.0-preview8.19405.7": {
         "type": "package",
         "compile": {
-          "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.dll": {}
+          "lib/netcoreapp3.0/Microsoft.AspNetCore.Mvc.Versioning.dll": {}
         },
         "runtime": {
-          "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.dll": {}
+          "lib/netcoreapp3.0/Microsoft.AspNetCore.Mvc.Versioning.dll": {}
         },
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
@@ -1323,19 +1323,21 @@
     }
   },
   "libraries": {
-    "Microsoft.AspNetCore.Mvc.Versioning/4.1.1": {
-      "sha512": "ioFhRz5gm2Ny+t758Jab638eTG8Uui++klcH00EgBuU/BQbjkbFY+9xw/CkoAChIcrJsoQP2NKDYJ09zN5jR0g==",
+    "Microsoft.AspNetCore.Mvc.Versioning/4.0.0-preview8.19405.7": {
+      "sha512": "DlbxhjWUZ10tV+/wMV9gA8mF9jeJHD7omJYogRKw+eJD18ERlKktXTYjCkRLv/HBB5oF87eR0MPc0nLU6T6/oA==",
       "type": "package",
-      "path": "microsoft.aspnetcore.mvc.versioning/4.1.1",
+      "path": "microsoft.aspnetcore.mvc.versioning/4.0.0-preview8.19405.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE",
-        "icon.png",
-        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.dll",
-        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.pdb",
-        "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.xml",
-        "microsoft.aspnetcore.mvc.versioning.4.1.1.nupkg.sha512",
+        "lib/netcoreapp3.0/Microsoft.AspNetCore.Mvc.Versioning.dll",
+        "lib/netcoreapp3.0/Microsoft.AspNetCore.Mvc.Versioning.pdb",
+        "lib/netcoreapp3.0/Microsoft.AspNetCore.Mvc.Versioning.xml",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Mvc.Versioning.dll",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Mvc.Versioning.pdb",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Mvc.Versioning.xml",
+        "microsoft.aspnetcore.mvc.versioning.4.0.0-preview8.19405.7.nupkg.sha512",
         "microsoft.aspnetcore.mvc.versioning.nuspec"
       ]
     },
@@ -5041,7 +5043,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "Microsoft.AspNetCore.Mvc.Versioning >= 4.1.1",
+      "Microsoft.AspNetCore.Mvc.Versioning >= 4.0.0-preview8.19405.7",
       "Microsoft.EntityFrameworkCore.Design >= 3.1.5",
       "TaskManager.DomainModel >= 1.0.0",
       "TaskManager.Infrastructure >= 1.0.0"
@@ -5093,7 +5095,7 @@
         "dependencies": {
           "Microsoft.AspNetCore.Mvc.Versioning": {
             "target": "Package",
-            "version": "[4.1.1, )"
+            "version": "[4.0.0-preview8.19405.7, )"
           },
           "Microsoft.EntityFrameworkCore.Design": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",

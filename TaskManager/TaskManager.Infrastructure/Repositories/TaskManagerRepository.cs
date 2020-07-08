@@ -26,20 +26,15 @@ namespace TaskManager.Infrastructure.Repositories
             taskManagerContext.SaveChanges();
         }
 
-        public void AddOrUpdate(T entity)
-        {
-            if (entity.IsNew)
-                Add(entity);
-            else
-                Update(entity);
+        //public void AddOrUpdate(T entity)
+        //{
+        //    if (entity.IsNew)
+        //        Add(entity);
+        //    else
+        //        Update(entity);
 
-            taskManagerContext.SaveChanges();
-        }
-
-        public async Task<int> CountAll()
-        {
-            return await taskManagerContext.Set<T>().CountAsync();
-        }
+        //    taskManagerContext.SaveChanges();
+        //}
 
         public void Delete(T entity)
         {
@@ -48,19 +43,14 @@ namespace TaskManager.Infrastructure.Repositories
             taskManagerContext.SaveChanges();
         }
 
-        public async Task<IReadOnlyList<T>> GetAll()
-        {
-            return await taskManagerContext.Set<T>().ToListAsync();
-        }
-
         public async Task<T> GetById(int id)
         {
             return await taskManagerContext.Set<T>().FindAsync(id);
         }
 
-        public Task<IReadOnlyList<T>> GetList(ISpecification<T> specification)
+        public async Task<IReadOnlyList<T>> GetList(ISpecification<T> specification)
         {
-            throw new NotImplementedException();
+            return await ApplySpecification(specification).ToListAsync();
         }
 
         public void Update(T entity)
@@ -69,6 +59,11 @@ namespace TaskManager.Infrastructure.Repositories
 
             taskManagerContext.SaveChanges();
         }
+
+        //public async Task<int> CountAll()
+        //{
+        //    return await taskManagerContext.Set<T>().CountAsync();
+        //}
 
         private IQueryable<T> ApplySpecification(ISpecification<T> specification)
         {

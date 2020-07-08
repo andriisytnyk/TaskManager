@@ -32,6 +32,8 @@ namespace TaskManager
         {
             services.AddControllers();
 
+            services.AddApiVersioning();
+
             services.AddDbContext<TaskManagerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TaskManager")));
 
             services.AddScoped<IRepository<GlobalTask>, GlobalTaskRepository>();
