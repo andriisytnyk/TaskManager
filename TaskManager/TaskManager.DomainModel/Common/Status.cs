@@ -6,7 +6,8 @@ namespace TaskManager.DomainModel.Common
 {
     public enum Status
     {
-        ToDo = 1,
+        Undefined = 0,
+        ToDo,
         InProgress,
         Done,
         Canceled

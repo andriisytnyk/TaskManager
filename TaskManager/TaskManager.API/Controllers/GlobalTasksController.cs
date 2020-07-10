@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.API.DTOs;
+using TaskManager.Core.Commands.GlobalTaskCommands;
+using TaskManager.Core.Messaging;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.Specifications.GlobalTasksSpecifications;
 using TaskManager.DomainModel.Aggregates;
@@ -17,11 +19,14 @@ namespace TaskManager.API.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class GlobalTasksController : ControllerBase
     {
+        private readonly ICommandBus _commandBus;
+
         public IRepository<GlobalTask> GlobalTaskRepository { get; set; }
 
-        public GlobalTasksController(IRepository<GlobalTask> globalTaskRepository)
+        public GlobalTasksController(IRepository<GlobalTask> globalTaskRepository, ICommandBus commandBus)
         {
             GlobalTaskRepository = globalTaskRepository;
+            _commandBus = commandBus ?? throw new ArgumentNullException(nameof(commandBus));
         }
 
         [HttpGet]
@@ -60,20 +65,34 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                GlobalTaskRepository.Add(new GlobalTask
-                {
-                    Name = globalTaskDTO.Name,
-                    Description = globalTaskDTO.Description,
-                    FinishDate = globalTaskDTO.FinishDate,
-                    Status = globalTaskDTO.Status,
-                    SubTasks = globalTaskDTO.SubTasks?.Select(st => new SubTask
-                    {
-                        Id = st.Id,
-                        Name = st.Name,
-                        Description = st.Description,
-                        Status = st.Status
-                    })
-                });
+                var command = new CreateGlobalTaskCommand(
+                    Guid.NewGuid(),
+                    globalTaskDTO.Name,
+                    globalTaskDTO.Description,
+                    globalTaskDTO.Status,
+                    globalTaskDTO.FinishDate,
+                    globalTaskDTO.SubTasks?.Select(st => new Core.Commands.SubTaskApplicationModel(
+                        st.Id, 
+                        st.Name, 
+                        st.Description, 
+                        st.Status)));
+
+                await _commandBus.Execute(command);
+
+                //GlobalTaskRepository.Add(new GlobalTask
+                //{
+                //    Name = globalTaskDTO.Name,
+                //    Description = globalTaskDTO.Description,
+                //    FinishDate = globalTaskDTO.FinishDate,
+                //    Status = globalTaskDTO.Status,
+                //    SubTasks = globalTaskDTO.SubTasks?.Select(st => new SubTask
+                //    {
+                //        Id = st.Id,
+                //        Name = st.Name,
+                //        Description = st.Description,
+                //        Status = st.Status
+                //    })
+                //});
                 return Ok();
             }
             catch (Exception ex)

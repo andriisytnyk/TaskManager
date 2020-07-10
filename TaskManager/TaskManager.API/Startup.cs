@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using TaskManager.Core.Messaging;
 using TaskManager.Core.Repositories;
 using TaskManager.DomainModel.Aggregates;
 using TaskManager.Infrastructure.Contexts.TaskManager;
@@ -39,6 +40,9 @@ namespace TaskManager
             services.AddScoped<IRepository<GlobalTask>, GlobalTaskRepository>();
             services.AddScoped<IRepository<PlannedTask>, PlannedTaskRepository>();
             services.AddScoped<IRepository<SubTask>, SubTaskRepository>();
+
+            services.AddScoped<IStorage, TaskManagerStorage>();
+            services.AddScoped<ICommandBus, TaskManagerBus>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
