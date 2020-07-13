@@ -50,7 +50,7 @@ namespace TaskManager.Core.CommandHandlers.GlobalTaskCommandHandlers
                         Name = st.Name,
                         Description = st.Description,
                         Status = st.Status
-                    })
+                    }).ToList()
                 };
             }
             catch (Exception ex)

@@ -11,10 +11,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using TaskManager.API.Middleware;
 using TaskManager.Core.Messaging;
 using TaskManager.Core.Repositories;
 using TaskManager.DomainModel.Aggregates;
 using TaskManager.Infrastructure.Contexts.TaskManager;
+using TaskManager.Infrastructure.ExtensionMethods;
+using TaskManager.Infrastructure.PipelineBuilder;
 using TaskManager.Infrastructure.Repositories;
 
 namespace TaskManager
@@ -35,11 +38,9 @@ namespace TaskManager
 
             services.AddApiVersioning();
 
-            services.AddDbContext<TaskManagerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TaskManager")));
+            services.UseEfCore(options => options.UseSqlServer(Configuration.GetConnectionString("TaskManager")));
 
-            services.AddScoped<IRepository<GlobalTask>, GlobalTaskRepository>();
-            services.AddScoped<IRepository<PlannedTask>, PlannedTaskRepository>();
-            services.AddScoped<IRepository<SubTask>, SubTaskRepository>();
+            services.UseCommandHandlers();
 
             services.AddScoped<IStorage, TaskManagerStorage>();
             services.AddScoped<ICommandBus, TaskManagerBus>();
@@ -54,6 +55,8 @@ namespace TaskManager
             }
 
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<TaskManagerPipelineMiddleware>();
 
             app.UseRouting();
 
