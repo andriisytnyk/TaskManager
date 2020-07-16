@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using TaskManager.Core.CommandHandlers.GlobalTaskCommandHandlers;
+using TaskManager.Core.CommandHandlers.PlannedTaskCommandHandlers;
+using TaskManager.Core.CommandHandlers.SubTaskCommandHandlers;
 using TaskManager.Core.Repositories;
 using TaskManager.DomainModel.Aggregates;
 using TaskManager.Infrastructure.Contexts.TaskManager;
@@ -17,7 +17,11 @@ namespace TaskManager.Infrastructure.ExtensionMethods
         public static IServiceCollection UseCommandHandlers(this IServiceCollection services)
         {
             UseGlobalTaskCommandHandlers(services);
+            UsePlannedTaskCommandHandlers(services);
+            UseSubTaskCommandHandlers(services);
+
             services.AddScoped<ITaskManagerPipelineBuilder, TaskManagerPipelineBuilder>();
+            
             return services;
         }
 
@@ -37,6 +41,22 @@ namespace TaskManager.Infrastructure.ExtensionMethods
         private static void UseGlobalTaskCommandHandlers(IServiceCollection services)
         {
             services.AddScoped<CreateGlobalTaskCommandHandler>();
+            services.AddScoped<UpdateGlobalTaskCommandHandler>();
+            services.AddScoped<DeleteGlobalTaskCommandHandler>();
+        }
+
+        private static void UsePlannedTaskCommandHandlers(IServiceCollection services)
+        {
+            services.AddScoped<CreatePlannedTaskCommandHandler>();
+            services.AddScoped<UpdatePlannedTaskCommandHandler>();
+            services.AddScoped<DeletePlannedTaskCommandHandler>();
+        }
+
+        private static void UseSubTaskCommandHandlers(IServiceCollection services)
+        {
+            services.AddScoped<CreateSubTaskCommandHandler>();
+            services.AddScoped<UpdateSubTaskCommandHandler>();
+            services.AddScoped<DeleteSubTaskCommandHandler>();
         }
     }
 }

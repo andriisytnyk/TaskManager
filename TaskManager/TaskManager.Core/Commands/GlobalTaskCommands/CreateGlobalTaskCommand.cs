@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using TaskManager.DomainModel.Common;
 
 namespace TaskManager.Core.Commands.GlobalTaskCommands

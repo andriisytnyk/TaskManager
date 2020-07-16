@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using TaskManager.Core.Repositories;
 using TaskManager.DomainModel.Aggregates;
 
-namespace BusinessRuleEngine.Core.Specifications
+namespace TaskManager.Core.Specifications
 {
     public abstract class BaseSpecification<T> : ISpecification<T> where T : Entity
     {

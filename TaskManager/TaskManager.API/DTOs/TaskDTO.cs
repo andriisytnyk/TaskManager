@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TaskManager.DomainModel.Common;
+﻿using TaskManager.DomainModel.Common;
 
 namespace TaskManager.API.DTOs
 {

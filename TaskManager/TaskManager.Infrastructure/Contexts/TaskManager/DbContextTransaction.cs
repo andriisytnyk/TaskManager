@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using TaskManager.Core.Repositories;
 
 namespace TaskManager.Infrastructure.Contexts.TaskManager

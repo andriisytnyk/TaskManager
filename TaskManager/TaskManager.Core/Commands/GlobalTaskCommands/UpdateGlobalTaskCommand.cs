@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using TaskManager.DomainModel.Common;
 
 namespace TaskManager.Core.Commands.GlobalTaskCommands
@@ -8,6 +7,7 @@ namespace TaskManager.Core.Commands.GlobalTaskCommands
     public class UpdateGlobalTaskCommand : IGlobalTaskCommand
     {
         public Guid Id { get; }
+        public int GlobalTaskId { get; set; }
         public string Name { get; }
         public string Description { get; }
         public Status Status { get; }
@@ -16,6 +16,7 @@ namespace TaskManager.Core.Commands.GlobalTaskCommands
 
         public UpdateGlobalTaskCommand(
             Guid id,
+            int globalTaskId,
             string name,
             string desc,
             Status status,
@@ -24,6 +25,8 @@ namespace TaskManager.Core.Commands.GlobalTaskCommands
         {
             if (id == Guid.Empty)
                 throw new ArgumentException($"{nameof(id)} cannot have '{Guid.Empty.ToString()}' value.");
+            if (globalTaskId == default(int))
+                throw new ArgumentException($"Incorrect format of field 'GlobalTaskId'. 'GlobalTaskId' cannot be 0.");
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException($"Incorrect format of field 'Name'. 'Name' cannot be null or empty.");
             if (desc == null)
@@ -36,6 +39,7 @@ namespace TaskManager.Core.Commands.GlobalTaskCommands
                 throw new ArgumentException($"Incorrect format of field 'SubTasks'. 'SubTasks' cannot be null.");
 
             Id = id;
+            GlobalTaskId = globalTaskId;
             Name = name;
             Description = desc;
             Status = status;

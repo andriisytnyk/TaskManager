@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
+using System.Threading.Tasks;
 using TaskManager.Core.Commands.GlobalTaskCommands;
 using TaskManager.Core.Exceptions;
 using TaskManager.Core.Messaging;
@@ -9,50 +9,37 @@ using TaskManager.DomainModel.Aggregates;
 
 namespace TaskManager.Core.CommandHandlers.GlobalTaskCommandHandlers
 {
-    public class CreateGlobalTaskCommandHandler : ICommandHandler<CreateGlobalTaskCommand>
+    public class DeleteGlobalTaskCommandHandler : ICommandHandler<DeleteGlobalTaskCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<GlobalTask> _repository;
         private readonly IStorage _storage;
 
-        public CreateGlobalTaskCommandHandler(IUnitOfWork unitOfWork, IRepository<GlobalTask> repository, IStorage storage)
+        public DeleteGlobalTaskCommandHandler(IUnitOfWork unitOfWork, IRepository<GlobalTask> repository, IStorage storage)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
         }
 
-        public async System.Threading.Tasks.Task Handle(CreateGlobalTaskCommand command)
+        public async System.Threading.Tasks.Task Handle(DeleteGlobalTaskCommand command)
         {
-            var globalTask = CreateGlobalTask(command);
+            var globalTask = await GetGlobalTask(command);
 
             await SaveChanges(globalTask);
 
             await _storage.SaveData(globalTask);
         }
 
-        private GlobalTask CreateGlobalTask(CreateGlobalTaskCommand createGlobalTaskCommand)
+        private async Task<GlobalTask> GetGlobalTask(DeleteGlobalTaskCommand deleteGlobalTaskCommand)
         {
             try
             {
-                return new GlobalTask()
-                {
-                    Name = createGlobalTaskCommand.Name,
-                    Description = createGlobalTaskCommand.Description,
-                    Status = createGlobalTaskCommand.Status,
-                    FinishDate = createGlobalTaskCommand.FinishDate,
-                    SubTasks = createGlobalTaskCommand.SubTasks?.Select(st => new SubTask
-                    {
-                        Id = st.Id,
-                        Name = st.Name,
-                        Description = st.Description,
-                        Status = st.Status
-                    }).ToList()
-                };
+                return await _repository.GetById(deleteGlobalTaskCommand.GlobalTaskId);
             }
             catch (Exception ex)
             {
-                throw new TaskManagerException($"Error has occured during {nameof(GlobalTask)} creation.", ex);
+                throw new TaskManagerException($"Error has occured during {nameof(GlobalTask)} getting.", ex);
             }
         }
 
@@ -60,7 +47,7 @@ namespace TaskManager.Core.CommandHandlers.GlobalTaskCommandHandlers
         {
             try
             {
-                _repository.Add(globalTask);
+                _repository.Delete(globalTask);
 
                 await _unitOfWork.SaveChangesAsync();
             }
