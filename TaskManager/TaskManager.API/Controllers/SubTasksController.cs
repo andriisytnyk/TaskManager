@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.API.DTOs;
+using TaskManager.Core.Commands.SubTaskCommands;
+using TaskManager.Core.Messaging;
 using TaskManager.Core.Repositories;
-using TaskManager.Core.Specifications.PlannedTasksSpecifications;
 using TaskManager.Core.Specifications.SubTasksSpecifications;
 using TaskManager.DomainModel.Aggregates;
 
@@ -18,11 +17,14 @@ namespace TaskManager.API.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class SubTasksController : ControllerBase
     {
+        private readonly ICommandBus _commandBus;
+
         public IRepository<SubTask> SubTaskRepository { get; set; }
 
-        public SubTasksController(IRepository<SubTask> subTaskRepository)
+        public SubTasksController(IRepository<SubTask> subTaskRepository, ICommandBus commandBus)
         {
             SubTaskRepository = subTaskRepository;
+            _commandBus = commandBus;
         }
 
         [HttpGet]
@@ -61,12 +63,14 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                SubTaskRepository.Add(new SubTask
-                {
-                    Name = subTaskDTO.Name,
-                    Description = subTaskDTO.Description,
-                    Status = subTaskDTO.Status
-                });
+                var command = new CreateSubTaskCommand(
+                    Guid.NewGuid(),
+                    subTaskDTO.Name,
+                    subTaskDTO.Description,
+                    subTaskDTO.Status);
+
+                await _commandBus.Execute(command);
+
                 return Ok();
             }
             catch (Exception ex)
@@ -80,13 +84,14 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                SubTaskRepository.Update(new SubTask
-                {
-                    Id = subTaskDTO.Id,
-                    Name = subTaskDTO.Name,
-                    Description = subTaskDTO.Description,
-                    Status = subTaskDTO.Status
-                });
+                var command = new UpdateSubTaskCommand(
+                    Guid.NewGuid(),
+                    subTaskDTO.Id,
+                    subTaskDTO.Name,
+                    subTaskDTO.Description,
+                    subTaskDTO.Status);
+
+                await _commandBus.Execute(command);
 
                 return Ok();
             }
@@ -102,7 +107,9 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                SubTaskRepository.Delete(await SubTaskRepository.GetById(id));
+                var command = new DeleteSubTaskCommand(Guid.NewGuid(), id);
+
+                await _commandBus.Execute(command);
 
                 return Ok();
             }

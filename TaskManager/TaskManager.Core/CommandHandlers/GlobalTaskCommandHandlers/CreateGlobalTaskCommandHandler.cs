@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaskManager.Core.Commands.GlobalTaskCommands;
 using TaskManager.Core.Exceptions;
 using TaskManager.Core.Messaging;
@@ -50,7 +47,7 @@ namespace TaskManager.Core.CommandHandlers.GlobalTaskCommandHandlers
                         Name = st.Name,
                         Description = st.Description,
                         Status = st.Status
-                    })
+                    }).ToList()
                 };
             }
             catch (Exception ex)

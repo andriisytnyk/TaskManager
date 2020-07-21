@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using TaskManager.DomainModel.Common;
 
 namespace TaskManager.Core.Commands.PlannedTaskCommands
@@ -8,6 +7,7 @@ namespace TaskManager.Core.Commands.PlannedTaskCommands
     public class UpdatePlannedTaskCommand : IPlannedTaskCommand
     {
         public Guid Id { get; }
+        public int PlannedTaskId { get; set; }
         public string Name { get; }
         public string Description { get; }
         public Status Status { get; }
@@ -20,6 +20,7 @@ namespace TaskManager.Core.Commands.PlannedTaskCommands
 
         public UpdatePlannedTaskCommand(
             Guid id,
+            int plannedTaskId,
             string name,
             string desc,
             Status status,
@@ -32,6 +33,8 @@ namespace TaskManager.Core.Commands.PlannedTaskCommands
         {
             if (id == Guid.Empty)
                 throw new ArgumentException($"{nameof(id)} cannot have '{Guid.Empty.ToString()}' value.");
+            if (plannedTaskId == default(int))
+                throw new ArgumentException($"Incorrect format of field 'PlannedTaskId'. 'PlannedTaskId' cannot be 0.");
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException($"Incorrect format of field 'Name'. 'Name' cannot be null or empty.");
             if (desc == null)
@@ -48,6 +51,7 @@ namespace TaskManager.Core.Commands.PlannedTaskCommands
                 throw new ArgumentException($"Incorrect format of field 'SubTasks'. 'SubTasks' cannot be null.");
 
             Id = id;
+            PlannedTaskId = plannedTaskId;
             Name = name;
             Description = desc;
             Status = status;

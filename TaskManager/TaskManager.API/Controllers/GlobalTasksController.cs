@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.API.DTOs;
 using TaskManager.Core.Commands.GlobalTaskCommands;
@@ -13,7 +11,6 @@ using TaskManager.DomainModel.Aggregates;
 
 namespace TaskManager.API.Controllers
 {
-    //[Route("api/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -79,20 +76,6 @@ namespace TaskManager.API.Controllers
 
                 await _commandBus.Execute(command);
 
-                //GlobalTaskRepository.Add(new GlobalTask
-                //{
-                //    Name = globalTaskDTO.Name,
-                //    Description = globalTaskDTO.Description,
-                //    FinishDate = globalTaskDTO.FinishDate,
-                //    Status = globalTaskDTO.Status,
-                //    SubTasks = globalTaskDTO.SubTasks?.Select(st => new SubTask
-                //    {
-                //        Id = st.Id,
-                //        Name = st.Name,
-                //        Description = st.Description,
-                //        Status = st.Status
-                //    })
-                //});
                 return Ok();
             }
             catch (Exception ex)
@@ -106,21 +89,20 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                GlobalTaskRepository.Update(new GlobalTask
-                {
-                    Id = globalTaskDTO.Id,
-                    Name = globalTaskDTO.Name,
-                    Description = globalTaskDTO.Description,
-                    FinishDate = globalTaskDTO.FinishDate,
-                    Status = globalTaskDTO.Status,
-                    SubTasks = globalTaskDTO.SubTasks?.Select(st => new SubTask
-                    {
-                        Id = st.Id,
-                        Name = st.Name,
-                        Description = st.Description,
-                        Status = st.Status
-                    })
-                });
+                var command = new UpdateGlobalTaskCommand(
+                    Guid.NewGuid(),
+                    globalTaskDTO.Id,
+                    globalTaskDTO.Name,
+                    globalTaskDTO.Description,
+                    globalTaskDTO.Status,
+                    globalTaskDTO.FinishDate,
+                    globalTaskDTO.SubTasks?.Select(st => new Core.Commands.SubTaskApplicationModel(
+                        st.Id,
+                        st.Name,
+                        st.Description,
+                        st.Status)));
+
+                await _commandBus.Execute(command);
 
                 return Ok();
             }
@@ -136,7 +118,9 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                GlobalTaskRepository.Delete(await GlobalTaskRepository.GetById(id));
+                var command = new DeleteGlobalTaskCommand(Guid.NewGuid(), id);
+
+                await _commandBus.Execute(command);
 
                 return Ok();
             }

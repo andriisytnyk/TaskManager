@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using TaskManager.DomainModel.Aggregates;
 
 namespace TaskManager.Core.Repositories

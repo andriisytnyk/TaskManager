@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TaskManager.DomainModel.Common
+﻿namespace TaskManager.DomainModel.Common
 {
     public enum Frequency
     {

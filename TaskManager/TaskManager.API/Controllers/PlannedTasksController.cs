@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.API.DTOs;
+using TaskManager.Core.Commands.PlannedTaskCommands;
+using TaskManager.Core.Messaging;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.Specifications.PlannedTasksSpecifications;
 using TaskManager.DomainModel.Aggregates;
@@ -17,11 +17,14 @@ namespace TaskManager.API.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class PlannedTasksController : ControllerBase
     {
+        private readonly ICommandBus _commandBus;
+
         public IRepository<PlannedTask> PlannedTaskRepository { get; set; }
 
-        public PlannedTasksController(IRepository<PlannedTask> plannedTaskRepository)
+        public PlannedTasksController(IRepository<PlannedTask> plannedTaskRepository, ICommandBus commandBus)
         {
             PlannedTaskRepository = plannedTaskRepository;
+            _commandBus = commandBus;
         }
 
         [HttpGet]
@@ -60,24 +63,24 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                PlannedTaskRepository.Add(new PlannedTask
-                {
-                    Name = plannedTaskDTO.Name,
-                    Description = plannedTaskDTO.Description,
-                    Frequency = plannedTaskDTO.Frequency,
-                    Estimation = plannedTaskDTO.Estimation,
-                    FinishDateTime = plannedTaskDTO.FinishDateTime,
-                    Requirement = plannedTaskDTO.Requirement,
-                    StartDateTime = plannedTaskDTO.StartDateTime,
-                    Status = plannedTaskDTO.Status,
-                    SubTasks = plannedTaskDTO.SubTasks?.Select(st => new SubTask
-                    {
-                        Id = st.Id,
-                        Name = st.Name,
-                        Description = st.Description,
-                        Status = st.Status
-                    })
-                });
+                var command = new CreatePlannedTaskCommand(
+                    Guid.NewGuid(),
+                    plannedTaskDTO.Name,
+                    plannedTaskDTO.Description,
+                    plannedTaskDTO.Status,
+                    plannedTaskDTO.StartDateTime,
+                    plannedTaskDTO.FinishDateTime,
+                    plannedTaskDTO.Estimation,
+                    plannedTaskDTO.Requirement,
+                    plannedTaskDTO.Frequency,
+                    plannedTaskDTO.SubTasks?.Select(st => new Core.Commands.SubTaskApplicationModel(
+                        st.Id,
+                        st.Name,
+                        st.Description,
+                        st.Status)));
+
+                await _commandBus.Execute(command);
+
                 return Ok();
             }
             catch (Exception ex)
@@ -91,25 +94,24 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                PlannedTaskRepository.Update(new PlannedTask
-                {
-                    Id = plannedTaskDTO.Id,
-                    Name = plannedTaskDTO.Name,
-                    Description = plannedTaskDTO.Description,
-                    Frequency = plannedTaskDTO.Frequency,
-                    Estimation = plannedTaskDTO.Estimation,
-                    FinishDateTime = plannedTaskDTO.FinishDateTime,
-                    Requirement = plannedTaskDTO.Requirement,
-                    StartDateTime = plannedTaskDTO.StartDateTime,
-                    Status = plannedTaskDTO.Status,
-                    SubTasks = plannedTaskDTO.SubTasks?.Select(st => new SubTask
-                    {
-                        Id = st.Id,
-                        Name = st.Name,
-                        Description = st.Description,
-                        Status = st.Status
-                    })
-                });
+                var command = new UpdatePlannedTaskCommand(
+                    Guid.NewGuid(),
+                    plannedTaskDTO.Id,
+                    plannedTaskDTO.Name,
+                    plannedTaskDTO.Description,
+                    plannedTaskDTO.Status,
+                    plannedTaskDTO.StartDateTime,
+                    plannedTaskDTO.FinishDateTime,
+                    plannedTaskDTO.Estimation,
+                    plannedTaskDTO.Requirement,
+                    plannedTaskDTO.Frequency,
+                    plannedTaskDTO.SubTasks?.Select(st => new Core.Commands.SubTaskApplicationModel(
+                        st.Id,
+                        st.Name,
+                        st.Description,
+                        st.Status)));
+
+                await _commandBus.Execute(command);
 
                 return Ok();
             }
@@ -125,7 +127,9 @@ namespace TaskManager.API.Controllers
         {
             try
             {
-                PlannedTaskRepository.Delete(await PlannedTaskRepository.GetById(id));
+                var command = new DeletePlannedTaskCommand(Guid.NewGuid(), id);
+
+                await _commandBus.Execute(command);
 
                 return Ok();
             }
