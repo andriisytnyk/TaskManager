@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using TaskManager.API.DTOs;
 using TaskManager.Core.Commands.SubTaskCommands;
 using TaskManager.Core.Messaging;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.Specifications.SubTasksSpecifications;
 using TaskManager.DomainModel.Aggregates;
+using TaskManager.Logging;
+using TaskManager.Logging.LoggingClasses;
 
 namespace TaskManager.API.Controllers
 {
@@ -18,26 +22,53 @@ namespace TaskManager.API.Controllers
     public class SubTasksController : ControllerBase
     {
         private readonly ICommandBus _commandBus;
+        private readonly ILogger<SubTasksController> _logger;
 
         public IRepository<SubTask> SubTaskRepository { get; set; }
 
-        public SubTasksController(IRepository<SubTask> subTaskRepository, ICommandBus commandBus)
+        public SubTasksController(IRepository<SubTask> subTaskRepository, ICommandBus commandBus, ILogger<SubTasksController> logger)
         {
             SubTaskRepository = subTaskRepository;
             _commandBus = commandBus;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllSubTasks()
         {
+            var requestId = Guid.NewGuid();
+
+            _logger.LogMessage(
+                LogLevel.Information,
+                new EnterLogMethod(
+                    MethodBase.GetCurrentMethod().ReflectedType.FullName,
+                    $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} started.",
+                    requestId));
+
             try
             {
                 var subTasksAllSpecification = new SubTasksAllSpecification();
 
-                return Ok(await SubTaskRepository.GetList(subTasksAllSpecification));
+                var subTasks = await SubTaskRepository.GetList(subTasksAllSpecification);
+
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.FullName,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} finished.",
+                        requestId));
+
+                return Ok(subTasks);
             }
             catch (Exception ex)
             {
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitFailedLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.Name,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} failed.",
+                        ex));
+
                 return BadRequest(ex);
             }
         }
@@ -46,14 +77,39 @@ namespace TaskManager.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> GetSubTask(int id)
         {
+            var requestId = Guid.NewGuid();
+
+            _logger.LogMessage(
+                LogLevel.Information,
+                new EnterLogMethod(
+                    MethodBase.GetCurrentMethod().ReflectedType.FullName,
+                    $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} started.",
+                    requestId));
+
             try
             {
                 var subTaskByIdSpecification = new SubTaskByIdSpecification(id);
 
-                return Ok((await SubTaskRepository.GetList(subTaskByIdSpecification)).SingleOrDefault());
+                var subTask = (await SubTaskRepository.GetList(subTaskByIdSpecification)).SingleOrDefault();
+
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.FullName,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} finished.",
+                        requestId));
+
+                return Ok(subTask);
             }
             catch (Exception ex)
             {
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitFailedLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.Name,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} failed.",
+                        ex));
+
                 return BadRequest(ex);
             }
         }
@@ -75,6 +131,13 @@ namespace TaskManager.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitFailedLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.Name,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} failed.",
+                        ex));
+
                 return BadRequest(ex);
             }
         }
@@ -97,6 +160,13 @@ namespace TaskManager.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitFailedLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.Name,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} failed.",
+                        ex));
+
                 return BadRequest(ex);
             }
         }
@@ -115,6 +185,13 @@ namespace TaskManager.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitFailedLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.Name,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} failed.",
+                        ex));
+
                 return BadRequest(ex);
             }
         }

@@ -46,6 +46,8 @@ namespace TaskManager
 
             app.UseMiddleware<TaskManagerPipelineMiddleware>();
 
+            app.UseMiddleware<RequestLoggingMiddleware>();
+
             app.UseRouting();
 
             app.UseAuthorization();

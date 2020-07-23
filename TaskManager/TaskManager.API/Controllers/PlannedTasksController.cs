@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using TaskManager.API.DTOs;
 using TaskManager.Core.Commands.PlannedTaskCommands;
 using TaskManager.Core.Messaging;
 using TaskManager.Core.Repositories;
 using TaskManager.Core.Specifications.PlannedTasksSpecifications;
 using TaskManager.DomainModel.Aggregates;
+using TaskManager.Logging;
+using TaskManager.Logging.LoggingClasses;
 
 namespace TaskManager.API.Controllers
 {
@@ -18,26 +22,53 @@ namespace TaskManager.API.Controllers
     public class PlannedTasksController : ControllerBase
     {
         private readonly ICommandBus _commandBus;
+        private readonly ILogger<PlannedTasksController> _logger;
 
         public IRepository<PlannedTask> PlannedTaskRepository { get; set; }
 
-        public PlannedTasksController(IRepository<PlannedTask> plannedTaskRepository, ICommandBus commandBus)
+        public PlannedTasksController(IRepository<PlannedTask> plannedTaskRepository, ICommandBus commandBus, ILogger<PlannedTasksController> logger)
         {
             PlannedTaskRepository = plannedTaskRepository;
             _commandBus = commandBus;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllPlannedTasks()
         {
+            var requestId = Guid.NewGuid();
+
+            _logger.LogMessage(
+                LogLevel.Information,
+                new EnterLogMethod(
+                    MethodBase.GetCurrentMethod().ReflectedType.FullName,
+                    $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} started.",
+                    requestId));
+
             try
             {
                 var plannedTaskWithDependenciesSpecification = new PlannedTaskWithDependenciesSpecification();
 
-                return Ok(await PlannedTaskRepository.GetList(plannedTaskWithDependenciesSpecification));
+                var plannedTasks = await PlannedTaskRepository.GetList(plannedTaskWithDependenciesSpecification);
+
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.FullName,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} finished.",
+                        requestId));
+
+                return Ok(plannedTasks);
             }
             catch (Exception ex)
             {
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitFailedLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.Name,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} failed.",
+                        ex));
+
                 return BadRequest(ex);
             }
         }
@@ -46,14 +77,39 @@ namespace TaskManager.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> GetPlannedTask(int id)
         {
+            var requestId = Guid.NewGuid();
+
+            _logger.LogMessage(
+                LogLevel.Information,
+                new EnterLogMethod(
+                    MethodBase.GetCurrentMethod().ReflectedType.FullName,
+                    $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} started.",
+                    requestId));
+
             try
             {
                 var plannedTaskByIdSpecification = new PlannedTaskByIdSpecification(id);
 
-                return Ok((await PlannedTaskRepository.GetList(plannedTaskByIdSpecification)).SingleOrDefault());
+                var plannedTask = (await PlannedTaskRepository.GetList(plannedTaskByIdSpecification)).SingleOrDefault();
+
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.FullName,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} finished.",
+                        requestId));
+
+                return Ok(plannedTask);
             }
             catch (Exception ex)
             {
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitFailedLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.Name,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} failed.",
+                        ex));
+
                 return BadRequest(ex);
             }
         }
@@ -85,6 +141,13 @@ namespace TaskManager.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitFailedLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.Name,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} failed.",
+                        ex));
+
                 return BadRequest(ex);
             }
         }
@@ -117,6 +180,13 @@ namespace TaskManager.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitFailedLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.Name,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} failed.",
+                        ex));
+
                 return BadRequest(ex);
             }
         }
@@ -135,6 +205,13 @@ namespace TaskManager.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogMessage(
+                    LogLevel.Information,
+                    new ExitFailedLogMethod(
+                        MethodBase.GetCurrentMethod().ReflectedType.Name,
+                        $@"Method {MethodBase.GetCurrentMethod().ReflectedType.FullName} failed.",
+                        ex));
+
                 return BadRequest(ex);
             }
         }
